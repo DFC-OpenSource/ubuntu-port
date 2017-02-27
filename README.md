@@ -21,7 +21,7 @@ $ cat $(ls ISSD_UBUNTU_XENIAL_REV01.img.xz.* | sort -V | tr '\n' ' ') | \
 Installation
 ------------
 
--	The following command assumes /dev/mmcblk0 is the microSD device
+-	The following command assumes /dev/mmcblk0 to be the microSD device
 -	The microSD device needs to be equal or larger than 8GB
 -	Run as root
 
@@ -30,6 +30,18 @@ Installation
 # cat $(ls ISSD_UBUNTU_XENIAL_REV01.img.xz.* | sort -V | tr '\n' ' ') | \
 	xz -d | \
 	pv > /dev/mmcblk0
+```
+
+Usage
+-----
+
+-	Boot the installed Ubuntu by using the following commands from uboot console
+
+```
+=> fatload mmc 0 0xa0000000 uimage
+=> fatload mmc 0 0x80000000 device-tree_03.00.00.dtb
+=> setenv bootargs "console=ttyS0,115200 root=/dev/mmcblk0p2 rootwait earlycon=uart8250,mmio,0x21c0500,115200 default_hugepagesz=2m hugepagesz=2m hugepages=16 modprobe.blacklist=nvme bootimg=issd panic=5"
+=> bootm 0xa0000000 - 0x80000000
 ```
 
 Changelog
